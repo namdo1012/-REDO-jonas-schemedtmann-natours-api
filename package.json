@@ -1,0 +1,25 @@
+{
+  "name": "starter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/namdo1012/-REDO-jonas-schemedtmann-natours-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/namdo1012/-REDO-jonas-schemedtmann-natours-api/issues"
+  },
+  "homepage": "https://github.com/namdo1012/-REDO-jonas-schemedtmann-natours-api#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.27",
+    "nodemon": "^2.0.4"
+  }
+}
