@@ -8,7 +8,11 @@ const DB = process.env.DATABASE.replace(
 );
 
 mongoose
-  .connect(DB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => {
     console.log('From server.js: Database connected successfully');
   });
