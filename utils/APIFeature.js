@@ -8,11 +8,9 @@ class APIFeature {
 
   filter() {
     const queryObjTmp = { ...this.queryObj };
-    // console.log(queryObj);
-
     // 1) Filtering ? Why does we need to delete all those fields???
     // => Answer: To run advanced filtering, all those fields will be excuted later
-    excludedFields = ['page', 'sort', 'limit', 'fields'];
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObjTmp[el]);
 
     // 2) Advanced Filtering: Operation: >=, <=, >, <
@@ -22,7 +20,6 @@ class APIFeature {
     // ===> the difference is '$'
     let queryStr = JSON.stringify(queryObjTmp);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-
     this.query = this.query.find(JSON.parse(queryStr));
 
     return this; // to chain multiple method
