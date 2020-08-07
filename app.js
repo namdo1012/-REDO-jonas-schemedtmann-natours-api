@@ -1,11 +1,18 @@
-// start:prod: "$env:NODE_ENV="ok"; $env:PORT="5000"; nodemon server.js"
+// Run with powershell: $env:NODE_ENV='production'; $env:PORT='5000'; nodemon server.js
+// Run with script in package.json: "set NODE_ENV='production'&& set NAMDO='5000'&& nodemon server.js"
+
 const express = require('express');
+const morgan = require('morgan');
 const tourRouter = require('./route/tourRoute');
 
 const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 
 const app = express();
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 app.use(express.json()); // To read req.body in POST
 
