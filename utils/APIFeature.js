@@ -42,9 +42,11 @@ class APIFeature {
 
   limitFields() {
     // 4) Limit
-    if (this.queryObj.select) {
-      const selectBy = this.queryObj.sort.split(',').join(' ');
-      this.query = this.query.select(selectBy);
+    if (this.queryObj.fields) {
+      console.log(this.queryObj);
+      const fields = this.queryObj.fields.split(',').join(' ');
+      console.log(fields);
+      this.query = this.query.select(fields);
     } else {
       this.query = this.query.select('-__v');
     }

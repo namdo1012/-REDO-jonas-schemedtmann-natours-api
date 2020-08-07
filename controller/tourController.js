@@ -1,8 +1,17 @@
 const Tour = require('../model/tourModel');
 const APIFeature = require('../utils/APIFeature');
 
+exports.aliasTop5CheapTours = (req, res, next) => {
+  req.query.sort = 'price';
+  req.query.limit = 5;
+  req.query.fields = 'name,duration,price,ratingAverage,difficulty';
+
+  next();
+};
+
 // Get All Tours
 exports.getAllTour = async (req, res) => {
+  console.log(req.query);
   try {
     const features = new APIFeature(Tour.find(), req.query)
       .filter()
@@ -145,6 +154,7 @@ exports.getTourStats = async (req, res) => {
   }
 };
 
+// Get Monthly Plan in Year
 exports.getMonthlyPlan = async (req, res, next) => {
   const year = req.params.year * 1;
   try {
