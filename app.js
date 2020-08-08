@@ -19,4 +19,13 @@ app.use(express.json()); // To read req.body in POST
 // Router Middleware
 app.use('/api/v1/tours', tourRouter);
 
+app.all('*', (req, res, next) => {
+  res.status(404).json({
+    status: 'fail',
+    message: 'This route have been not defined yet',
+  });
+
+  next();
+});
+
 module.exports = app;
