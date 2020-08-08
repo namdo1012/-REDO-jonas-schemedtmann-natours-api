@@ -6,6 +6,10 @@ const morgan = require('morgan');
 const tourRouter = require('./route/tourRoute');
 
 const dotenv = require('dotenv');
+
+const AppError = require('./utils/AppError');
+const globalErrorHandler = require('./controller/errorController');
+
 dotenv.config({ path: './config.env' });
 
 const app = express();
@@ -19,13 +23,19 @@ app.use(express.json()); // To read req.body in POST
 // Router Middleware
 app.use('/api/v1/tours', tourRouter);
 
+// Error: Not handled routes
 app.all('*', (req, res, next) => {
-  res.status(404).json({
-    status: 'fail',
-    message: 'This route have been not defined yet',
-  });
-
-  next();
+  // res.status(404).json({
+  //   status: 'fail',
+  //   message: 'This route have been not defined yet',
+  // // });
+  // const err = new Error('This route have been not defined yet');
+  // err.statusCode = 404;
+  // err.status = 'fail';
+  next(new AppError(404, 'This route have been not defined yet!'));
 });
+
+// Error handling
+app.use(globalErrorHandler);
 
 module.exports = app;
