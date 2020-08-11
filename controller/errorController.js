@@ -1,22 +1,22 @@
-const AppError = require('./../utils/appError.js');
+const AppError = require('./../utils/appError');
 
 const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.path}: ${err.value}.`;
-  return new AppError(message, 400);
+  return new AppError(400, message);
 };
 
 const handleDuplicateFieldsDB = (err) => {
-  const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  console.log(value);
+  // const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+  console.log(Object.keys(err.keyPattern));
 
-  const message = `Duplicate field value: ${value}. Please use another value!`;
-  return new AppError(message, 400);
+  const message = `Duplicate field value:. Please use another value!`;
+  return new AppError(400, message);
 };
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
 
   const message = `Invalid input data. ${errors.join('. ')}`;
-  return new AppError(message, 400);
+  return new AppError(400, message);
 };
 
 const sendErrorDev = (err, res) => {
@@ -29,35 +29,48 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
-  // Can trusted error, operational error
+  // Operational, trusted error: send message to client
+  console.log(err);
   if (err.isOperational) {
+    // res.status(err.statusCode).json({
+    //   status: err.status,
+    //   message: err.message,
+    // });
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
     });
 
-    // App Error --> just send a generic message
+    // Programming or other unknown error: don't leak error details
   } else {
-    // Log the error to console
-    console.error('ERROR!!!', err);
-    // Send mess to clients
+    // 1) Log error
+    console.error('ERROR ', err);
+
+    // 2) Send generic message
     res.status(500).json({
       status: 'error',
       message: 'Something went very wrong!',
+      error: err,
     });
   }
 };
 
-module.exports = globalErrorHandler = (err, req, res, next) => {
+module.exports = (err, req, res, next) => {
+  // console.log(err.stack);
+
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
-  // If development enviroment: Send all infos about error to developers
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
-
-    // If production enviroment: Just send message to clients
   } else if (process.env.NODE_ENV === 'production') {
-    sendErrorProd(err, res);
+    let error = { ...err };
+    // Send wrong ID Error
+    if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
+    if (error.code === 11000) error = handleDuplicateFieldsDB(error);
+    if (error.name === 'ValidationError')
+      error = handleValidationErrorDB(error);
+
+    sendErrorProd(error, res);
   }
 };

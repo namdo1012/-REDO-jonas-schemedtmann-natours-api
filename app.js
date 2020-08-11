@@ -13,11 +13,12 @@ const globalErrorHandler = require('./controller/errorController');
 dotenv.config({ path: './config.env' });
 
 const app = express();
-console.log(process.env);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+console.log(`You currently in ${process.env.NODE_ENV} mode!`);
 
 app.use(express.json()); // To read req.body in POST
 

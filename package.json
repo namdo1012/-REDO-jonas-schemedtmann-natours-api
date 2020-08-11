@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
-    "start:prod": "set NODE_ENV=production&& set NAMDO='5000'&& nodemon server.js"
+    "start:prod": "set NODE_ENV=production&& set NAMDO='5000'&& nodemon server.js",
+    "debug:prod": "set NODE_ENV=production&& ndb server.js"
   },
   "repository": {
     "type": "git",
