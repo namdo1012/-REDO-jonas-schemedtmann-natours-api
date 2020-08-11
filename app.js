@@ -4,6 +4,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const tourRouter = require('./route/tourRoute');
+const userRouter = require('./route/userRoute');
 
 const dotenv = require('dotenv');
 
@@ -24,6 +25,7 @@ app.use(express.json()); // To read req.body in POST
 
 // Router Middleware
 app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
 
 // Error: Not handled routes
 app.all('*', (req, res, next) => {
