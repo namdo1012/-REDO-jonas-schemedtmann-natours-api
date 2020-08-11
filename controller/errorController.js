@@ -30,7 +30,7 @@ const sendErrorDev = (err, res) => {
 
 const sendErrorProd = (err, res) => {
   // Operational, trusted error: send message to client
-  console.log(err);
+  // console.log(err);
   if (err.isOperational) {
     // res.status(err.statusCode).json({
     //   status: err.status,
@@ -44,13 +44,12 @@ const sendErrorProd = (err, res) => {
     // Programming or other unknown error: don't leak error details
   } else {
     // 1) Log error
-    console.error('ERROR ', err);
+    // console.error('ERROR ', err);
 
     // 2) Send generic message
     res.status(500).json({
       status: 'error',
       message: 'Something went very wrong!',
-      error: err,
     });
   }
 };
@@ -69,8 +68,11 @@ module.exports = (err, req, res, next) => {
     if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
     // Dupplicate unique fields in database
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
-    if (error.name === 'ValidationError')
+    // if (error.name === 'ValidationError')
+    if (error._message.search('validation') !== -1) {
+      // console.log(error._message.search('validations'));
       error = handleValidationErrorDB(error);
+    }
 
     sendErrorProd(error, res);
   }
