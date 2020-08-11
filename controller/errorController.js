@@ -30,12 +30,7 @@ const sendErrorDev = (err, res) => {
 
 const sendErrorProd = (err, res) => {
   // Operational, trusted error: send message to client
-  // console.log(err);
   if (err.isOperational) {
-    // res.status(err.statusCode).json({
-    //   status: err.status,
-    //   message: err.message,
-    // });
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
@@ -44,7 +39,7 @@ const sendErrorProd = (err, res) => {
     // Programming or other unknown error: don't leak error details
   } else {
     // 1) Log error
-    // console.error('ERROR ', err);
+    console.error('ERROR ', err);
 
     // 2) Send generic message
     res.status(500).json({
@@ -55,8 +50,6 @@ const sendErrorProd = (err, res) => {
 };
 
 module.exports = (err, req, res, next) => {
-  // console.log(err.stack);
-
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
@@ -68,9 +61,10 @@ module.exports = (err, req, res, next) => {
     if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
     // Dupplicate unique fields in database
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
+
+    // Validation wrong: Ex.: 'A tour must have a name'
     // if (error.name === 'ValidationError')
-    if (error._message.search('validation') !== -1) {
-      // console.log(error._message.search('validations'));
+    if (error._message && error._message.search('validation') !== -1) {
       error = handleValidationErrorDB(error);
     }
 

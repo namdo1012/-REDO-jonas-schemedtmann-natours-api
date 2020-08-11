@@ -1,6 +1,12 @@
 const app = require('./app');
 const mongoose = require('mongoose');
 
+// Need to be on top of app, to catch all errors
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  process.exit(1);
+});
+
 // Connect to DB
 const DB = process.env.DATABASE.replace(
   '<password>',
@@ -18,6 +24,14 @@ mongoose
   });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log('Unhandle Rejection !!!!');
+  // Close server then close app
+  server.close(() => {
+    process.exit(1);
+  });
 });
