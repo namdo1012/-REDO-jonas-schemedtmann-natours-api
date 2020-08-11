@@ -7,9 +7,9 @@ const handleCastErrorDB = (err) => {
 
 const handleDuplicateFieldsDB = (err) => {
   // const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-  console.log(Object.keys(err.keyPattern));
+  const value = Object.keys(err.keyPattern)[0];
 
-  const message = `Duplicate field value:. Please use another value!`;
+  const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(400, message);
 };
 const handleValidationErrorDB = (err) => {
@@ -67,6 +67,7 @@ module.exports = (err, req, res, next) => {
     let error = { ...err };
     // Send wrong ID Error
     if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
+    // Dupplicate unique fields in database
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error);
