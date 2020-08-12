@@ -23,6 +23,13 @@ console.log(`You currently in ${process.env.NODE_ENV} mode!`);
 
 app.use(express.json()); // To read req.body in POST
 
+// Check token in request's header middleware
+// To send jwt through req's header, set Header Key = 'Authorization', Header Value = 'Bearer jwt'
+// app.use((req, res, next) => {
+//   console.log(req.headers);
+//   next();
+// });
+
 // Router Middleware
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
