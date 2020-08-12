@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('./../model/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const jwt = require('jsonwebtoken');
 
 exports.signup = catchAsync(async (req, res, next) => {
   const user = await User.create({
@@ -12,10 +13,18 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
   console.log(user);
 
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+  // Hide user's password data before send to clients
+  user.password = undefined;
+
   res.status(201).json({
     status: 'success',
     data: {
       user,
+      token,
     },
   });
 });
@@ -29,8 +38,10 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // Find user in db with email and check correct password
-  // const user = await User.find({ password, email });
-  const user = await User.find({ email }).select('+password');
+  // const user = await User.findOne({ password, email });
+  // ***I have got a problem right here when call find() instead of findOne method.
+  // It will lead to 'user' will be a arrray, not a document then we cannot call user.correctPassword after that!
+  const user = await User.findOne({ email }).select('+password');
 
   const isCorrectPassword = user.correctPassword(password, user.password);
   if (!user || !isCorrectPassword) {
