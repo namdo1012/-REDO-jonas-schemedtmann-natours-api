@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -36,6 +37,17 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same!',
     },
   },
+});
+
+userSchema.pre('save', async function (next) {
+  // Will run when password actually be created or modified, not run when user update other stuffs like email...
+  if (!this.isModified('password')) return next();
+
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
+
+  // Delete password confirm
+  this.passwordConfirm = undefined;
 });
 
 userSchema.methods.correctPassword = function (
