@@ -20,8 +20,8 @@ const createSendToken = (user, statusCode, res) => {
     status: 'success',
     data: {
       user,
-      token,
     },
+    token,
   });
 };
 
@@ -101,3 +101,17 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = user;
   next();
 });
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    console.log(roles);
+    console.log(req.user.role);
+    // roles ['admin', 'lead-guide']
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError(403, 'You do not have permission to perform this action!')
+      );
+    }
+    next();
+  };
+};
