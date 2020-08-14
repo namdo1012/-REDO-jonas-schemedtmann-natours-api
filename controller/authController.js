@@ -49,11 +49,11 @@ exports.login = catchAsync(async (req, res, next) => {
   // Find user in db with email and check correct password
   // const user = await User.findOne({ password, email });
   // ***I have got a problem right here when call find() instead of findOne() method.
-  // It will lead to 'user' will be a arrray, not a document then we cannot call user.correctPassword after that!
+  // It will lead to 'user' will be an array, not a document then we cannot call user.correctPassword after that!
   const user = await User.findOne({ email }).select('+password');
-  const isCorrectPassword = await user.correctPassword(password, user.password);
+  // const isCorrectPassword = await user.correctPassword(password, user.password); --> Cannot use this line cause if user is null then user.correctPassword will throw an error
 
-  if (!user || !isCorrectPassword) {
+  if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError(401, 'Incorrect password or email'));
   }
 

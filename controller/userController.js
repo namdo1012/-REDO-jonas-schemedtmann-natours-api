@@ -61,3 +61,19 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// We actually not delete the user from DB. Just set user's state to false
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { active: 'false' },
+    { new: true }
+  );
+
+  res.status(204).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  });
+});
