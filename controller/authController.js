@@ -188,7 +188,31 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save();
 
   // 3) Update passwordChangeAt if user saved to db successfully
-  console.log(user);
+  // console.log(user);
   // 4) Log user in again
+  createSendToken(user, 200, res);
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // Get user from db
+  const user = await User.findById(req.user.id).select('+password');
+
+  // Check if old password is correct
+  const isCorrectPassword = await user.correctPassword(
+    req.body.currentPassword,
+    user.password
+  );
+
+  if (!isCorrectPassword)
+    return next(new AppError(401, 'Your current password is wrong!'));
+
+  // Update user's password
+  const { newPassword, newPasswordConfirm } = req.body;
+  user.password = newPassword;
+  user.passwordConfirm = newPasswordConfirm;
+  user.passwordChangedAt = Date.now() - 1000;
+  await user.save();
+
+  // Log user in again
   createSendToken(user, 200, res);
 });
