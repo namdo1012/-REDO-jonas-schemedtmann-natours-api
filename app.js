@@ -2,12 +2,13 @@
 // Run with script in package.json: "set NODE_ENV='production'&& set NAMDO='5000'&& nodemon server.js"
 
 const express = require('express');
-const morgan = require('morgan');
 const tourRouter = require('./route/tourRoute');
 const userRouter = require('./route/userRoute');
 
 const dotenv = require('dotenv');
 const rateLimiter = require('express-rate-limit');
+const morgan = require('morgan');
+const helmet = require('helmet');
 
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controller/errorController');
@@ -17,6 +18,9 @@ dotenv.config({ path: './config.env' });
 const app = express();
 
 // GLOBAL MIDDLEWARE
+
+// SECURE: HTTP Headers
+app.use(helmet());
 
 // SECURE: Limit amount of requests from 1 IP -> avoid brute force
 const limiter = rateLimiter({
@@ -32,7 +36,7 @@ if (process.env.NODE_ENV === 'development') {
 
 console.log(`You currently in ${process.env.NODE_ENV} mode!`);
 
-app.use(express.json()); // To read req.body in POST
+app.use(express.json({ limit: '10kb' })); // To read req.body in POST
 
 // Check token in request's header middleware
 // To send jwt through req's header, set Header Key = 'Authorization', Header Value = 'Bearer jwt'
