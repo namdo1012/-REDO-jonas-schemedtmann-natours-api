@@ -7,8 +7,7 @@ const tourRouter = require('./route/tourRoute');
 const userRouter = require('./route/userRoute');
 
 const dotenv = require('dotenv');
-const rateLimiter = require('express-rate-limiter');
-const MemoryStore = require('express-rate-limiter/lib/memoryStore');
+const rateLimiter = require('express-rate-limit');
 
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controller/errorController');
@@ -20,13 +19,12 @@ const app = express();
 // GLOBAL MIDDLEWARE
 
 // SECURE: Limit amount of requests from 1 IP -> avoid brute force
-const limiter = new rateLimiter({
-  outerTimeLimit: 2 * 60 * 1000, // 2 minutes in miliseconds
-  outerLimit: 2, // max amount of requests allowed in outerTimeLimit
+const limiter = rateLimiter({
+  max: 2,
+  windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
-  db: new MemoryStore(),
 });
-app.use('/api', limiter.middleware());
+app.use('/api', limiter);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
