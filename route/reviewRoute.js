@@ -3,9 +3,9 @@ const express = require('express');
 const reviewControlller = require('./../controller/reviewController');
 const authController = require('../controller/authController');
 
+// NESTED ROUTE
 const router = express.Router({ mergeParams: true });
 
-router.route('/').get(reviewControlller.getAllReviews);
 router.route('/:id').get(reviewControlller.getReview);
 router
   .route('/')
@@ -13,6 +13,7 @@ router
     authController.protect,
     authController.restrictTo('user'),
     reviewControlller.createReview
-  );
+  )
+  .get(reviewControlller.getAllReviews);
 
 module.exports = router;
