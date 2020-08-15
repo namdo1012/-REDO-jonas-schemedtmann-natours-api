@@ -4,6 +4,7 @@
 const express = require('express');
 const tourRouter = require('./route/tourRoute');
 const userRouter = require('./route/userRoute');
+const reviewRouter = require('./route/reviewRoute');
 
 const dotenv = require('dotenv');
 const rateLimiter = require('express-rate-limit');
@@ -71,6 +72,7 @@ app.use(express.json({ limit: '10kb' })); // To read req.body in POST
 // Router Middleware
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 // Error: Not handled routes
 app.all('*', (req, res, next) => {
