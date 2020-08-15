@@ -15,6 +15,18 @@ const createToken = (id) => {
 const createSendToken = (user, statusCode, res) => {
   const token = createToken(user._id);
 
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    // Flags the cookie to be accessible only by the web server.
+    httpOnly: true,
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  // Send jwt to clients via cookie
+  res.cookie('jwt', token, cookieOptions);
+
   // Hide user's password data before send to clients
   user.password = undefined;
 
