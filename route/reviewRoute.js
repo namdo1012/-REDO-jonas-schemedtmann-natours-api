@@ -6,7 +6,11 @@ const authController = require('../controller/authController');
 // NESTED ROUTE
 const router = express.Router({ mergeParams: true });
 
-router.route('/:id').get(reviewControlller.getReview);
+router
+  .route('/:id')
+  .get(reviewControlller.getReview)
+  .delete(reviewControlller.deleteReview);
+
 router
   .route('/')
   .post(
