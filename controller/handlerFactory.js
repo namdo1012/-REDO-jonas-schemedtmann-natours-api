@@ -1,4 +1,5 @@
 const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 // Delete Tour
 exports.deleteModel = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -31,6 +32,19 @@ exports.updateModel = (Model) =>
     }
 
     res.status(400).json({
+      status: 'success',
+      data: {
+        data: doc,
+      },
+    });
+  });
+
+// Create new Model
+exports.createModel = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.create(req.body);
+
+    res.status(201).json({
       status: 'success',
       data: {
         data: doc,
