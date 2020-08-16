@@ -20,19 +20,14 @@ exports.getUser = (req, res) => {
     message: 'This route is not yet defined!',
   });
 };
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-};
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
-};
 
+// Create new User
+exports.createUser = handlerFactory.createModel(User);
+
+// Update User - !!!!need to add secure: only allow to update email and name
+exports.updateUser = handlerFactory.updateModel(User);
+
+// Delete User
 exports.deleteUser = handlerFactory.deleteModel(User);
 
 exports.updateMe = catchAsync(async (req, res, next) => {
