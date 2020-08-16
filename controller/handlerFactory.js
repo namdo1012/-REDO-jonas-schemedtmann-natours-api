@@ -16,3 +16,24 @@ exports.deleteModel = (Model) =>
       data: null,
     });
   });
+
+// Update Model
+exports.updateModel = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: true,
+    });
+
+    if (!doc) {
+      return next(new AppError(404, 'No doc found with that ID!'));
+    }
+
+    res.status(400).json({
+      status: 'success',
+      data: {
+        data: doc,
+      },
+    });
+  });
