@@ -6,7 +6,9 @@
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "set NODE_ENV=production&& set NAMDO='5000'&& nodemon server.js",
-    "debug:prod": "set NODE_ENV=production&& ndb server.js"
+    "debug:prod": "set NODE_ENV=production&& ndb server.js",
+    "import-data:db": "node ./dev-data/data/importTourData.js --importData",
+    "delete-data:db": "node ./dev-data/data/importTourData.js --deleteData"
   },
   "repository": {
     "type": "git",
