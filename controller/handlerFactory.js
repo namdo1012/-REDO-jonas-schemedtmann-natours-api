@@ -1,6 +1,27 @@
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
-// Delete Tour
+
+// Get Model By ID
+exports.getModel = (Model, populateOptions) =>
+  catchAsync(async (req, res, next) => {
+    let query = Model.findById(req.params.id);
+    if (populateOptions) query = query.populate(populateOptions);
+
+    const doc = await query;
+
+    if (!doc) {
+      return next(new AppError(404, 'No tour found with that ID!'));
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        data: doc,
+      },
+    });
+  });
+
+// Delete Model
 exports.deleteModel = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id, {
