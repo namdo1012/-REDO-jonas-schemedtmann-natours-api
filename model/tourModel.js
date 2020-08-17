@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -9,6 +10,10 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       maxlength: [40, 'A tour must have less or equal than 40 characters'],
       minlength: [10, 'A tour must have more or equal than 10 character'],
+    },
+
+    slug: {
+      type: String,
     },
 
     duration: {
@@ -130,6 +135,11 @@ const tourSchema = new mongoose.Schema(
 // INDEXING
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ slug: 1 });
+
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 tourSchema.pre(/^find/, function (next) {
   this.populate({
