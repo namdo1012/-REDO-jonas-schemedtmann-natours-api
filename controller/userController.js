@@ -3,21 +3,13 @@ const catchAsync = require('./../utils/catchAsync');
 
 const handlerFactory = require('./handlerFactory');
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const user = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      user,
-    },
-  });
-});
-
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
+
+// Get All User
+exports.getAllUsers = handlerFactory.getAllModel(User);
 
 // Get User By ID
 exports.getUser = handlerFactory.getModel(User);
