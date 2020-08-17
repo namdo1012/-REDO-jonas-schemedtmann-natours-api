@@ -4,31 +4,6 @@ const AppError = require('../utils/appError');
 
 const handlerFactory = require('./handlerFactory');
 
-exports.getAllReviews = catchAsync(async (req, res, next) => {
-  let filter = {};
-  if (req.params.tourId) filter = { tour: req.params.tourId };
-
-  const reviews = await Review.find(filter);
-  res.status(200).json({
-    status: 'success',
-    data: {
-      reviews,
-    },
-  });
-});
-
-exports.getReview = catchAsync(async (req, res, next) => {
-  const review = await Review.findById(req.params.id);
-  if (!review) return next(new AppError(400, 'No review found with that ID'));
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      review,
-    },
-  });
-});
-
 // Allow nested routes
 exports.getTourUserId = (req, res, next) => {
   if (!req.body.tour) req.body.tour = req.params.tourId;
@@ -36,6 +11,12 @@ exports.getTourUserId = (req, res, next) => {
 
   next();
 };
+
+// Get All Reviews
+exports.getAllReviews = handlerFactory.getAllModel(Review);
+
+// Get Review By ID
+exports.getReview = handlerFactory.getModel(Review);
 
 // Create new Review
 exports.createReview = handlerFactory.createModel(Review);
