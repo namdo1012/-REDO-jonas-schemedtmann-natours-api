@@ -6,10 +6,19 @@ const authController = require('../controller/authController');
 // NESTED ROUTE
 const router = express.Router({ mergeParams: true });
 
+router.use(authController.protect);
+
 router
   .route('/:id')
   .get(reviewControlller.getReview)
-  .delete(reviewControlller.deleteReview);
+  .patch(
+    authController.restrictTo('user', 'admin'),
+    reviewControlller.updateReview
+  )
+  .delete(
+    authController.restrictTo('user', 'admin'),
+    reviewControlller.deleteReview
+  );
 
 router
   .route('/')
