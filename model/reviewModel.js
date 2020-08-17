@@ -32,6 +32,9 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+// INDEXING
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 reviewSchema.pre(/^find/, function (next) {
   // this.populate({
   //   path: 'tour',
@@ -76,8 +79,9 @@ reviewSchema.statics.calcAverageRatings = async function (tourID) {
 // findByIdAndUpdate
 // findByIdAndDelete
 reviewSchema.pre(/^findOneAnd/, async function (next) {
+  // Save this docs to use on post, because this hook is point to Query not a Doc
   this.r = await this.findOne();
-  console.log('This:', this);
+  // console.log('This:', this);
   // console.log(this.r);
   next();
 });
