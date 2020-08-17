@@ -14,17 +14,18 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined!',
-  });
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
 };
+
+// Get User By ID
+exports.getUser = handlerFactory.getModel(User);
 
 // Create new User
 exports.createUser = handlerFactory.createModel(User);
 
-// Update User - !!!!need to add secure: only allow to update email and name
+// Update User
 exports.updateUser = handlerFactory.updateModel(User);
 
 // Delete User
