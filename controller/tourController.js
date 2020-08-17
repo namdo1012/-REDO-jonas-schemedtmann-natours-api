@@ -14,23 +14,7 @@ exports.aliasTop5CheapTours = (req, res, next) => {
 };
 
 // Get All Tours
-exports.getAllTour = catchAsync(async (req, res, next) => {
-  // console.log(req.query);
-  const features = new APIFeature(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-
-  const tours = await features.query;
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
+exports.getAllTour = handlerFactory.getAllModel(Tour);
 
 // Get Tour by ID
 exports.getTour = handlerFactory.getModel(Tour);
