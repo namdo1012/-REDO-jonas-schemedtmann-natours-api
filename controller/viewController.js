@@ -11,7 +11,8 @@ exports.getOverview = catchAsync(async (req, res, next) => {
 });
 
 exports.getTourView = catchAsync(async (req, res, next) => {
-  const currentTour = await Tour.find({ slug: req.params.slug });
+  const currentTour = await Tour.findOne({ slug: req.params.slug });
+  console.log(currentTour);
   res.render('tour', {
     title: currentTour.name,
     tour: currentTour,
