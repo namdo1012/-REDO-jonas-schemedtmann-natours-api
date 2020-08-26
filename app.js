@@ -5,6 +5,7 @@ const express = require('express');
 const tourRouter = require('./route/tourRoute');
 const userRouter = require('./route/userRoute');
 const reviewRouter = require('./route/reviewRoute');
+const viewRouter = require('./route/viewRoute');
 
 const dotenv = require('dotenv');
 const rateLimiter = require('express-rate-limit');
@@ -30,9 +31,9 @@ app.set('views', path.join(__dirname, 'view'));
 // Serve stastic files
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.route('/').get((req, res, next) => {
-  res.render('base');
-});
+// app.route('/').get((req, res, next) => {
+//   res.render('base');
+// });
 
 // GLOBAL MIDDLEWARE
 // SECURE: HTTP Headers
@@ -82,6 +83,7 @@ app.use(express.json({ limit: '10kb' })); // To read req.body in POST
 // });
 
 // Router Middleware
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
