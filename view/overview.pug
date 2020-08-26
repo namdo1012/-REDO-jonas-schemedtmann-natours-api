@@ -5,6 +5,6 @@ include _card
 block content
   main.main
     .card-container
-      each tour in tours
-        +card(tour)
+      each tour, index in tours
+        +card(tour, index)
  

@@ -1,9 +1,9 @@
-mixin card(tour)
+mixin card(tour, index)
   .card
     .card__header
       .card__picture
         .card__picture-overlay  
-        img.card__picture-img(src='img/tour-1-cover.jpg', alt='Tour 1')
+        img.card__picture-img(src=`img/tours/tour-${index+1}-cover.jpg`, alt=`Tour ${index+1}`)
       h3.heading-tertirary
         span= tour.name
     .card__details
