@@ -14,6 +14,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 
+const path = require('path');
+
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controller/errorController');
 
@@ -21,8 +23,15 @@ dotenv.config({ path: './config.env' });
 
 const app = express();
 
-// GLOBAL MIDDLEWARE
+// Setting up view engine
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'view'));
 
+app.route('/').get((req, res, next) => {
+  res.render('base');
+});
+
+// GLOBAL MIDDLEWARE
 // SECURE: HTTP Headers
 app.use(helmet());
 
