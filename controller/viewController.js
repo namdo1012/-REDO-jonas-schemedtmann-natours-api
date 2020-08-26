@@ -9,3 +9,11 @@ exports.getOverview = catchAsync(async (req, res, next) => {
     tours,
   });
 });
+
+exports.getTourView = catchAsync(async (req, res, next) => {
+  const currentTour = await Tour.find({ slug: req.params.slug });
+  res.render('tour', {
+    title: currentTour.name,
+    tour: currentTour,
+  });
+});
