@@ -1,5 +1,8 @@
 extends base
 
+//- block append head 
+
+
 mixin overviewBoxDetail(label, text, icon)
   .overview-box__detail
     svg.overview-box__icon
@@ -63,7 +66,7 @@ block content
 
 
   section.section-map
-    #map
+    #map(data-locations=`${JSON.stringify(tour.locations)}`)
 
   section.section-reviews
     .reviews

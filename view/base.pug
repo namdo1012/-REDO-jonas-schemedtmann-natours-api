@@ -1,15 +1,26 @@
 doctype html
 html(lang='en')
   head
-    meta(charset='UTF-8')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(rel='shortcut icon', type='image/png', href='/img/favicon.png')
-    link(href='https://fonts.googleapis.com/css?family=Lato:300,300i,700', rel='stylesheet')
-    link(rel='stylesheet', href='/css/style.css')
-    title Natours | #{title}
+    block head
+      meta(charset='UTF-8')
+      meta(name='viewport', content='width=device-width, initial-scale=1.0')
+      meta(http-equiv='Content-Security-Policy', content="default-src blob: https://* * 'unsafe-inline' https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js ;worker-src blob: ;script-src 'unsafe-inline' https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js ;script-src-elem * https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js; child-src blob: ;img-src 'self'; connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com ")
+
+      link(rel='shortcut icon', type='image/png', href='/img/favicon.png')
+      link(href='https://fonts.googleapis.com/css?family=Lato:300,300i,700', rel='stylesheet')
+      link(rel='stylesheet', href='/css/style.css')
+
+      script(src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js')
+      link(href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css', rel='stylesheet')
+      title Natours | #{title}
   body
+    //- HEADER
     include _header
 
+    //- CONTENT
     block content
 
+    //- FOOTER
     include _footer
+
+    script(src='/js/mapbox.js')
