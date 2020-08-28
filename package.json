@@ -22,6 +22,7 @@
   "homepage": "https://github.com/namdo1012/-REDO-jonas-schemedtmann-natours-api#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-mongo-sanitize": "^2.0.0",
