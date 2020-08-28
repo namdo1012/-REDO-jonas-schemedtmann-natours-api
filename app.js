@@ -14,6 +14,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+var cors = require('cors');
 
 const path = require('path');
 
@@ -23,6 +24,8 @@ const globalErrorHandler = require('./controller/errorController');
 dotenv.config({ path: './config.env' });
 
 const app = express();
+
+app.use(cors());
 
 // Setting up view engine
 app.set('view engine', 'pug');
