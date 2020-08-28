@@ -16,9 +16,15 @@ exports.getTourView = catchAsync(async (req, res, next) => {
     select: 'review rating user',
   });
 
-  console.log(currentTour);
+  // console.log(currentTour);
   res.render('tour', {
     title: currentTour.name,
     tour: currentTour,
+  });
+});
+
+exports.getLoginForm = catchAsync((req, res, next) => {
+  res.render('login', {
+    title: 'Log in your account',
   });
 });
