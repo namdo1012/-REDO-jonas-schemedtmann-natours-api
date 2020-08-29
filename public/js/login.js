@@ -3,7 +3,7 @@ const loginForm = document.querySelector('.form--login');
 
 const login = async (email, password) => {
   try {
-    const res = await fetch({
+    const res = await axios({
       method: 'post',
       url: 'http://127.0.0.1:3000/api/v1/users/login',
       data: {
@@ -12,6 +12,7 @@ const login = async (email, password) => {
       },
     });
     console.log(res);
+    console.log(res.data.status);
 
     if (res.data.status === 'success') {
       document.cookie = `jwt=${res.data.token}`;
