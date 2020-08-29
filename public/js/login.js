@@ -1,7 +1,6 @@
-const loginForm = document.querySelector('.form--login');
-// console.log({ email, password });
+import axios from 'axios';
 
-const login = async (email, password) => {
+export const login = async (email, password) => {
   try {
     const res = await axios({
       method: 'post',
@@ -21,11 +20,3 @@ const login = async (email, password) => {
     console.log(err.response.data);
   }
 };
-
-loginForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  login(email, password);
-  // console.log('OK');
-});
