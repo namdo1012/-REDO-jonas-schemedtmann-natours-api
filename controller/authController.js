@@ -230,3 +230,43 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // Log user in again
   createSendToken(user, 200, res);
 });
+
+// This middleware is just used for check user is logged in or not, if not just to call next() to render
+// different page
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      // Verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+      // console.log(decoded); //{ id: '5f33f354d05b7d4b4c0ae869', iat: 1597240149, exp: 1597240185 }
+
+      // Check if user still exist (user haven't deleted right after token is issued)
+      const user = await User.findById(decoded.id);
+      // console.log(user);
+
+      if (!user) {
+        return next();
+      }
+
+      // Check if user changed password after the token is issued
+      if (user.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+
+      // THERE IS A LOGGED IN USER
+      // Assign to rendered pages can access user variable
+      res.locals.user = user;
+      console.log(res.locals.user);
+      console.log('Is logged function: You are logged in ');
+      return next();
+    } catch (err) {
+      console.log('Error from isLogged function', err);
+      return next();
+    }
+  }
+  // If there not jwt in request
+  next();
+};
