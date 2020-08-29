@@ -7,6 +7,7 @@ const userRouter = require('./route/userRoute');
 const reviewRouter = require('./route/reviewRoute');
 const viewRouter = require('./route/viewRoute');
 
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const rateLimiter = require('express-rate-limit');
 const morgan = require('morgan');
@@ -26,6 +27,7 @@ dotenv.config({ path: './config.env' });
 const app = express();
 
 app.use(cors());
+app.use(cookieParser());
 
 // Setting up view engine
 app.set('view engine', 'pug');
