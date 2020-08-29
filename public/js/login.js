@@ -12,10 +12,10 @@ const login = async (email, password) => {
       },
     });
     console.log(res);
-    console.log(res.data.status);
 
     if (res.data.status === 'success') {
       document.cookie = `jwt=${res.data.token}`;
+      window.location.assign('/');
     }
   } catch (err) {
     console.log(err.response.data);
