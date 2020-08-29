@@ -8,7 +8,9 @@
     "start:prod": "set NODE_ENV=production&& set NAMDO='5000'&& nodemon server.js",
     "debug:prod": "set NODE_ENV=production&& ndb server.js",
     "import-data:db": "node ./dev-data/data/importTourData.js --importData",
-    "delete-data:db": "node ./dev-data/data/importTourData.js --deleteData"
+    "delete-data:db": "node ./dev-data/data/importTourData.js --deleteData",
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
+    "build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +23,8 @@
   },
   "homepage": "https://github.com/namdo1012/-REDO-jonas-schemedtmann-natours-api#readme",
   "dependencies": {
+    "@babel/polyfill": "^7.10.4",
+    "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -40,5 +44,8 @@
     "slugify": "^1.4.5",
     "validator": "^13.1.1",
     "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
   }
 }
