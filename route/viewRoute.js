@@ -10,5 +10,6 @@ router
 router
   .route('/login')
   .get(authController.isLoggedIn, viewController.getLoginForm);
+router.route('/me').get(authController.protect, viewController.getAccountPage);
 
 module.exports = router;
