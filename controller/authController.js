@@ -106,7 +106,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // Check if user still exist (user haven't deleted right after token is issued)
   const user = await User.findById(decoded.id);
-  console.log(user);
 
   if (!user) {
     return next(
@@ -123,6 +122,9 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // At last, grant access to protected routes
   req.user = user;
+  // Pass user to render pages
+  console.log(user);
+  res.locals.user = user;
   next();
 });
 
