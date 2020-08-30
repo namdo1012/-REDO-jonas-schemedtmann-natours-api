@@ -73,6 +73,14 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
+
 exports.protect = catchAsync(async (req, res, next) => {
   // Get token from header and check if token exist
   let token;
@@ -259,11 +267,11 @@ exports.isLoggedIn = async (req, res, next) => {
       // THERE IS A LOGGED IN USER
       // Assign to rendered pages can access user variable
       res.locals.user = user;
-      console.log(res.locals.user);
-      console.log('Is logged function: You are logged in ');
+      // console.log(res.locals.user);
+      console.log('isLoggedIn function: You are logged in! ');
       return next();
     } catch (err) {
-      console.log('Error from isLogged function', err);
+      console.log('Error from isLogged function!', err);
       return next();
     }
   }

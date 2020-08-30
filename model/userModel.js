@@ -53,16 +53,17 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// userSchema.pre('save', async function (next) {
-//   // Will run when password actually be created or modified, not run when user update other stuffs like email...
-//   if (!this.isModified('password')) return next();
+userSchema.pre('save', async function (next) {
+  user.name.split(' ')[0];
+  // Will run when password actually be created or modified, not run when user update other stuffs like email...
+  if (!this.isModified('password')) return next();
 
-//   // Hash the password with cost of 12
-//   this.password = await bcrypt.hash(this.password, 12);
+  // Hash the password with cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
 
-//   // Delete password confirm
-//   this.passwordConfirm = undefined;
-// });
+  // Delete password confirm
+  this.passwordConfirm = undefined;
+});
 
 // Just query active users to clients. (Get all users)
 userSchema.pre(/^find/, function (next) {

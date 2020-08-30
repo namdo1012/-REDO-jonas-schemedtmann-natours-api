@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { showAlert } from './alert';
 
 export const login = async (email, password) => {
   try {
@@ -10,13 +11,20 @@ export const login = async (email, password) => {
         password,
       },
     });
-    console.log(res);
+    // console.log(res);
 
     if (res.data.status === 'success') {
       document.cookie = `jwt=${res.data.token}`;
-      window.location.assign('/');
+
+      showAlert('success', 'You are now logged in!');
+
+      // REDIRECT to overview page after 1.5s
+      window.setTimeout(() => {
+        window.location.assign('/');
+      }, 1500);
     }
   } catch (err) {
-    console.log(err.response.data);
+    console.log('Login function: ', err);
+    showAlert('error', 'Error logging in! Try again.');
   }
 };
