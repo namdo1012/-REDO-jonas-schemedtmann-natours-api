@@ -40,7 +40,7 @@ const sendErrorDev = (err, req, res) => {
   }
 
   // RENDERED WEBSITE
-  console.error('ERROR 💥', err);
+  console.error('ERROR 💥', err); // THis line log wrong error???
   return res.status(err.statusCode).render('error', {
     title: 'Something went wrong!',
     msg: err.message,
