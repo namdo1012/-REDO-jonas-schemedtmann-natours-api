@@ -15,5 +15,6 @@ export const logout = async () => {
     }
   } catch (err) {
     console.log('Err from Logout func: ', err.response);
+    showAlert('error', 'Error logging out! Try again.');
   }
 };

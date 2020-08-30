@@ -25,5 +25,6 @@ export const login = async (email, password) => {
     }
   } catch (err) {
     console.log('Login function: ', err);
+    showAlert('error', 'Error logging in! Try again.');
   }
 };
