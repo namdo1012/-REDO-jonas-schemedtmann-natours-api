@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 exports.getOverview = catchAsync(async (req, res, next) => {
   const tours = await Tour.find();
 
-  res.render('overview', {
+  res.status(200).render('overview', {
     title: 'Overview Page',
     tours,
   });
@@ -17,14 +17,14 @@ exports.getTourView = catchAsync(async (req, res, next) => {
   });
 
   // console.log(currentTour);
-  res.render('tour', {
+  res.status(200).render('tour', {
     title: currentTour.name,
     tour: currentTour,
   });
 });
 
 exports.getLoginForm = catchAsync(async (req, res, next) => {
-  res.render('login', {
+  res.status(200).render('login', {
     title: 'Log in your account',
   });
 });

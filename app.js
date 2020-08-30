@@ -26,7 +26,10 @@ dotenv.config({ path: './config.env' });
 
 const app = express();
 
+// Enable cors
 app.use(cors());
+
+// Parser jwt from request
 app.use(cookieParser());
 
 // Setting up view engine
@@ -36,12 +39,7 @@ app.set('views', path.join(__dirname, 'view'));
 // Serve stastic files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.route('/').get((req, res, next) => {
-//   res.render('base');
-// });
-
-// GLOBAL MIDDLEWARE
-// SECURE: HTTP Headers
+// SECURE: HTTP Headers _ Set header
 app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
