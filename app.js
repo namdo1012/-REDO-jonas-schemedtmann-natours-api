@@ -43,6 +43,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // GLOBAL MIDDLEWARE
 // SECURE: HTTP Headers
 app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ['*'],
+      scriptSrc: ['*'],
+    },
+  })
+);
 
 // SECURE: Limit amount of requests from 1 IP -> avoid brute force
 const limiter = rateLimiter({
