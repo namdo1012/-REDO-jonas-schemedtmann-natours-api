@@ -16,6 +16,7 @@ exports.getTourView = catchAsync(async (req, res, next) => {
     path: 'reviews',
     select: 'review rating user',
   });
+  // console.log(currentTour);
 
   if (!currentTour) {
     return next(new AppError(404, 'There is no tour with that name!'));

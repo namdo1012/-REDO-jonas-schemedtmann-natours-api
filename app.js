@@ -101,6 +101,7 @@ app.use('/api/v1/reviews', reviewRouter);
 
 // Error: Not handled routes
 app.all('*', (req, res, next) => {
+  console.log('This middle ware is called');
   next(new AppError(404, 'This route have been not defined yet!'));
 });
 
