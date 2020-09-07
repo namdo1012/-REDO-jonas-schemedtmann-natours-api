@@ -21,6 +21,8 @@ export const updatePassword = async (
     });
 
     if (res.data.status === 'success') {
+      // After update password, new token was send to user, it need to be set newly!
+      document.cookie = `jwt=${res.data.token}`;
       showAlert('success', 'Password update successfully');
     }
   } catch (err) {
