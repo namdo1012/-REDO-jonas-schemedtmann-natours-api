@@ -37,14 +37,17 @@ if (userDataForm) {
 
 if (userPasswordForm) {
   console.log('There is userpasswordform');
-  userPasswordForm.addEventListener('submit', (e) => {
+  userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    document.querySelector('.btn--save-password').textContent = 'Updating...';
     const currentPassword = document.getElementById('password-current').value;
     const newPassword = document.getElementById('password').value;
     const newPasswordConfirm = document.getElementById('password-confirm')
       .value;
 
-    updatePassword(currentPassword, newPassword, newPasswordConfirm);
-    // console.log({ currentPassword, newPassword, newPasswordConfirm });
+    await updatePassword(currentPassword, newPassword, newPasswordConfirm);
+
+    // Clear input and return button back after updated
+    document.querySelector('.btn--save-password').textContent = 'Save password';
   });
 }
