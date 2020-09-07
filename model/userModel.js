@@ -54,7 +54,6 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function (next) {
-  user.name.split(' ')[0];
   // Will run when password actually be created or modified, not run when user update other stuffs like email...
   if (!this.isModified('password')) return next();
 

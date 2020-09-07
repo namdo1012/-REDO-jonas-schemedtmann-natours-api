@@ -6,7 +6,7 @@ const router = express.Router();
 router.route('/').get(authController.isLoggedIn, viewController.getOverview);
 router
   .route('/tour/:slug')
-  .get(authController.isLoggedIn, viewController.getTourView);
+  .get(authController.protect, viewController.getTourView);
 router
   .route('/login')
   .get(authController.isLoggedIn, viewController.getLoginForm);

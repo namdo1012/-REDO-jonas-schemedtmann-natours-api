@@ -9,7 +9,6 @@ export const updateSetting = async (name, email) => {
       headers: {
         Authorization: `Bearer ${document.cookie.replace('jwt=', '')}`,
       },
-      withCredentials: true,
       data: {
         name,
         email,

@@ -35,6 +35,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   // Get user from db and update allowed fields [email, name]
   const user = await User.findById(req.user.id);
+  // console.log(user);
   if (req.body.name) user.name = req.body.name;
   if (req.body.email) user.email = req.body.email;
   await user.save();

@@ -95,6 +95,8 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
+    error.message = err.message;
+
     // Send wrong ID Error
     if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
     // Dupplicate unique fields in database
