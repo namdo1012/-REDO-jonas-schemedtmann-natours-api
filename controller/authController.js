@@ -89,7 +89,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-    // console.log(token);
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
@@ -123,7 +122,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // At last, grant access to protected routes
   req.user = user;
   // Pass user to render pages
-  console.log(user);
+  // console.log(user);
   res.locals.user = user;
   next();
 });

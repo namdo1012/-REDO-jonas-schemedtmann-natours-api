@@ -6,6 +6,7 @@ const tourRouter = require('./route/tourRoute');
 const userRouter = require('./route/userRoute');
 const reviewRouter = require('./route/reviewRoute');
 const viewRouter = require('./route/viewRoute');
+const path = require('path');
 
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
@@ -17,8 +18,6 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 var cors = require('cors');
 
-const path = require('path');
-
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controller/errorController');
 
@@ -26,11 +25,15 @@ dotenv.config({ path: './config.env' });
 
 const app = express();
 
-// Enable cors
-app.use(cors());
+app.use(express.json({ limit: '10kb' })); // To read req.body in POST
+
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Parser jwt from request
 app.use(cookieParser());
+
+// Enable cors
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 // Setting up view engine
 app.set('view engine', 'pug');
@@ -84,15 +87,6 @@ app.use(
 
 console.log(`You currently in ${process.env.NODE_ENV} mode!`);
 
-app.use(express.json({ limit: '10kb' })); // To read req.body in POST
-
-// Check token in request's header middleware
-// To send jwt through req's header, set Header Key = 'Authorization', Header Value = 'Bearer jwt'
-// app.use((req, res, next) => {
-//   console.log(req.headers);
-//   next();
-// });
-
 // Router Middleware
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
@@ -101,7 +95,6 @@ app.use('/api/v1/reviews', reviewRouter);
 
 // Error: Not handled routes
 app.all('*', (req, res, next) => {
-  console.log('This middle ware is called');
   next(new AppError(404, 'This route have been not defined yet!'));
 });
 
