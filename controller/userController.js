@@ -2,20 +2,31 @@ const User = require('./../model/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const multer = require('multer');
 const handlerFactory = require('./handlerFactory');
+const AppError = require('./../utils/appError');
 
 // Config multer
-const multerStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/img/users/');
-  },
-  filename: function (req, file, cb) {
-    const ext = file.mimetype.split('/')[1];
-    const filename = `user-${req.user.id}-${Date.now()}.${ext}`;
-    cb(null, filename);
-  },
-});
+// const multerStorage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'public/img/users/');
+//   },
+//   filename: function (req, file, cb) {
+//     const ext = file.mimetype.split('/')[1];
+//     const filename = `user-${req.user.id}-${Date.now()}.${ext}`;
+//     cb(null, filename);
+//   },
+// });
 
-const upload = multer({ storage: multerStorage });
+const multerStorage = multer.memoryStorage();
+
+const fileUploadFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError(400, 'Not an image! Please upload only image'));
+  }
+};
+
+const upload = multer({ storage: multerStorage, fileFilter: fileUploadFilter });
 
 exports.uploadPhoto = upload.single('photo');
 
