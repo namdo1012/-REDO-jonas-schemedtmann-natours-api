@@ -8566,51 +8566,58 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var updateSetting = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(name, email) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(name, email, photo) {
     var res;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
+            console.log({
+              name: name,
+              email: email,
+              photo: photo
+            });
+            _context.prev = 1;
+            _context.next = 4;
             return (0, _axios.default)({
               method: 'patch',
               url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
               headers: {
-                Authorization: "Bearer ".concat(document.cookie.replace('jwt=', ''))
+                Authorization: "Bearer ".concat(document.cookie.replace('jwt=', '')),
+                'Content-Type': 'multipart/form-data'
               },
               data: {
                 name: name,
-                email: email
+                email: email,
+                photo: photo
               }
             });
 
-          case 3:
+          case 4:
             res = _context.sent;
 
             if (res.data.status === 'success') {
               (0, _alert.showAlert)('success', 'Data update successfully!');
             }
 
-            _context.next = 11;
+            _context.next = 12;
             break;
 
-          case 7:
-            _context.prev = 7;
-            _context.t0 = _context["catch"](0);
+          case 8:
+            _context.prev = 8;
+            _context.t0 = _context["catch"](1);
             console.log(_context.t0);
             (0, _alert.showAlert)('error', _context.t0.response.data.message);
 
-          case 11:
+          case 12:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[0, 7]]);
+    }, _callee, null, [[1, 8]]);
   }));
 
-  return function updateSetting(_x, _x2) {
+  return function updateSetting(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -8981,9 +8988,16 @@ if (userDataForm) {
   console.log('There is userdataform');
   userDataForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    (0, _updateSetting.updateSetting)(name, email);
+    var form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]); // const name = document.getElementById('name').value;
+    // const email = document.getElementById('email').value;
+    // console.log(document.getElementById('name').value);
+    // console.log(document.getElementById('email').value);
+    // console.log(document.getElementById('photo').value);
+
+    (0, _updateSetting.updateSetting)(form.get('name'), form.get('email'), form.get('photo'));
   });
 }
 
@@ -9052,7 +9066,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55101" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54369" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
