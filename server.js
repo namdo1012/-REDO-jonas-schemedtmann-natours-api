@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 // Need to be on top of app, to catch all errors
 process.on('uncaughtException', (err) => {
+  console.log(err);
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   process.exit(1);
 });
