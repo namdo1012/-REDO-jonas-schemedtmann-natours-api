@@ -1,8 +1,44 @@
 const Tour = require('../model/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('../utils/appError');
+const multer = require('multer');
+
+// Config multer
+const multerStorage = multer.memoryStorage();
+
+// const filterUploadPhotos = (req, file, cb) => {
+//   if ()
+// }
+
+const upload = multer({ storage: multerStorage });
+
+exports.testUploadPhotos = (req, res, next) => {
+  console.log(req.files);
+  next();
+};
+
+exports.uploadTourPhotos = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]);
+
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) return next();
+
+  // Resize cover image
+  req.body.imageCover = `tour-cover-${req.params.id}-${Date.now()}.jpeg`;
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.imageCover}`);
+  // Resize tour images
+
+  next();
+});
 
 const handlerFactory = require('./handlerFactory');
+const sharp = require('sharp');
 
 exports.aliasTop5CheapTours = (req, res, next) => {
   req.query.sort = 'price';
