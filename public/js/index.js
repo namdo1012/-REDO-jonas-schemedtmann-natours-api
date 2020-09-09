@@ -19,13 +19,11 @@ if (loginForm)
 
 if (logoutButton) {
   logoutButton.addEventListener('click', (e) => {
-    // console.log('Logging out');
     logout();
   });
 }
 
 if (userDataForm) {
-  console.log('There is userdataform');
   userDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const form = new FormData();
@@ -33,18 +31,13 @@ if (userDataForm) {
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
 
-    // const name = document.getElementById('name').value;
-    // const email = document.getElementById('email').value;
-    // console.log(document.getElementById('name').value);
-    // console.log(document.getElementById('email').value);
-    // console.log(document.getElementById('photo').value);
-
-    updateSetting(form.get('name'), form.get('email'), form.get('photo'));
+    // Note: Must to pass form class to function instead of values of name, email or photo
+    // Because axios automatically realize form class is multipart-form-data
+    updateSetting(form);
   });
 }
 
 if (userPasswordForm) {
-  console.log('There is userpasswordform');
   userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     document.querySelector('.btn--save-password').textContent = 'Updating...';
