@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const pug = require('pug');
 
 module.exports = class Email {
   // user: user's infor: email, name,.. to send mail to
@@ -29,6 +30,14 @@ module.exports = class Email {
   }
 
   sendEmail(template, subject) {
+    // 1. Convert pug template to html to send via mail
+    const html = pug.renderFile(`${__dirname}/../../view/email/welcomeEmail.pug`, {
+      firstName: this.firstname,
+      url: this.url,
+      subject
+    })
+
+    // 2. Define mail options
     const mailOptions = {
       from: this.from, // sender address
       to: this.to, // list of receivers
@@ -36,7 +45,9 @@ module.exports = class Email {
       text: options.message, // plain text body
     };
   
-    let info = await transporter.sendMail(mailOptions);
+    // send mail
+    let info = await this.createNewTransport().sendMail(mailOptions);
+    console.log('From mail: ', info);
   }
 
   sendWelcome() {
