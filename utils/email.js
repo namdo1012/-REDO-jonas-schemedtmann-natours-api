@@ -1,12 +1,13 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
 
 module.exports = class Email {
   // user: user's infor: email, name,.. to send mail to
   // url: href in email template, direct user to specific route
   constructor(user, url) {
-    this.from = `NAM DO ${process.env.EMAIL_FROM}`;
+    this.from = process.env.EMAIL_FROM;
     this.to = user.email;
     this.firstname = user.name.split(' ')[0];
     this.url = url;
@@ -15,8 +16,13 @@ module.exports = class Email {
   createNewTransport() {
     if (process.env.NODE_ENV === 'production') {
       // Send mail with SENDGRID
-
-      return 1;
+      return nodemailer.createTransport(
+        sendgridTransport({
+          auth: {
+            api_key: process.env.SENDGRID_API_PASSWORD, // SG password
+          },
+        })
+      );
     }
 
     // Else if NODE_ENV === development
@@ -53,7 +59,10 @@ module.exports = class Email {
   }
 
   async sendWelcome() {
-    return await this.sendEmail('welcome', 'Welcome to the Natours family!');
+    return await this.sendEmail(
+      'welcomeEmail',
+      'Welcome to the Natours family!'
+    );
   }
 
   async sendResetPassEmail() {
